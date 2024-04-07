@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterator, Self
+from typing import Self
 
 from src.types import Tuple16Int, Tuple32Int
 
@@ -14,9 +14,6 @@ class RoundKey:
             raise ValueError(
                 f"round key len must be 16 bytes, but given {len(self.vector)}"
             )
-
-    def __iter__(self) -> Iterator[int]:
-        return iter(self.vector)
 
 
 @dataclass(frozen=True, slots=True)
