@@ -1,10 +1,11 @@
-from src.constants import L_VECTOR, PI, C
+from src.constants import L_VECTOR, PI, PI_INVERSE, C
 from src.key import Key, RoundKey
 from src.types import Tuple16Int
 
 
 class Grasshopper:
     _pi: tuple[int, ...] = PI
+    _pi_inverse: tuple[int, ...] = PI_INVERSE
     _c: tuple[Tuple16Int, ...] = C
     _l_vector: Tuple16Int = L_VECTOR
 
@@ -19,6 +20,15 @@ class Grasshopper:
             cypher_text = self._l_transformation(cypher_text)
         cypher_text = self._xor_vectors(cypher_text, self._round_keys[9].vector)
         return cypher_text
+
+    def decrypt(self, block: Tuple16Int) -> Tuple16Int:
+        cypher_block = block[:]
+        for i in range(9, 0, -1):
+            cypher_block = self._xor_vectors(cypher_block, self._round_keys[i].vector)
+            cypher_block = self._l_inverse_transformation(cypher_block)
+            cypher_block = self._substitute_based_on_pi_inverse(cypher_block)
+        message = self._xor_vectors(cypher_block, self._round_keys[0].vector)
+        return message
 
     def _expand_key(self, key: Key) -> tuple[RoundKey, ...]:
         mut_round_keys: list[RoundKey] = []
@@ -61,15 +71,30 @@ class Grasshopper:
         assert len(vector) == 16
         return tuple(self._pi[item] for item in vector)
 
+    def _substitute_based_on_pi_inverse(self, vector: Tuple16Int) -> Tuple16Int:
+        assert len(vector) == 16
+        return tuple(self._pi_inverse[item] for item in vector)
+
     def _l_transformation(self, vector: Tuple16Int) -> Tuple16Int:
         assert len(vector) == 16
         for _ in range(len(vector)):
             vector = self._r_transformation(vector)
         return vector
 
+    def _l_inverse_transformation(self, vector: Tuple16Int) -> Tuple16Int:
+        assert len(vector) == 16
+        for _ in range(len(vector)):
+            vector = self._r_inverse_transformation(vector)
+        return vector
+
     def _r_transformation(self, vector: Tuple16Int) -> Tuple16Int:
         assert len(vector) == 16
         return self._l_func(vector), *vector[:-1]
+
+    def _r_inverse_transformation(self, vector: Tuple16Int) -> Tuple16Int:
+        assert len(vector) == 16
+        cycle_left_shift_vector = *vector[1:], vector[0]
+        return *vector[1:], self._l_func(cycle_left_shift_vector)
 
     def _l_func(self, vector: Tuple16Int) -> int:
         assert len(vector) == 16

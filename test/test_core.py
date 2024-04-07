@@ -98,3 +98,20 @@ def test_encrypt() -> None:
 
     # Assert
     assert result == tuple(binascii.unhexlify("7f679d90bebc24305a468d42b9d4edcd"))
+
+
+def test_decrypt() -> None:
+    # Arrange
+    cypher = list(binascii.unhexlify("7f679d90bebc24305a468d42b9d4edcd"))
+    key = Key.from_iterable(
+        binascii.unhexlify(
+            "8899aabbccddeeff0011223344556677"
+            "fedcba98765432100123456789abcdef"
+        )
+    )  # fmt: skip
+
+    # Act
+    result = Grasshopper(key).decrypt(tuple(cypher))
+
+    # Assert
+    assert result == tuple(binascii.unhexlify("1122334455667700ffeeddccbbaa9988"))
