@@ -1,6 +1,6 @@
 import binascii
 
-from src.core import Grasshopper
+from src.grasshopper import Grasshopper
 from src.key import Key, RoundKey
 
 
