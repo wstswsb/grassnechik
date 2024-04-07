@@ -60,7 +60,6 @@ class Grasshopper:
         vector_1: Tuple16Int,
         vector_2: Tuple16Int,
     ) -> tuple[int, ...]:
-        assert len(vector_1) == len(vector_2) == 16
         return tuple(
             v1_item ^ v2_item
             for v1_item, v2_item
@@ -68,36 +67,29 @@ class Grasshopper:
         )  # fmt: skip
 
     def _substitute_based_on_pi(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         return tuple(self._pi[item] for item in vector)
 
     def _substitute_based_on_pi_inverse(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         return tuple(self._pi_inverse[item] for item in vector)
 
     def _l_transformation(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         for _ in range(len(vector)):
             vector = self._r_transformation(vector)
         return vector
 
     def _l_inverse_transformation(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         for _ in range(len(vector)):
             vector = self._r_inverse_transformation(vector)
         return vector
 
     def _r_transformation(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         return self._l_func(vector), *vector[:-1]
 
     def _r_inverse_transformation(self, vector: Tuple16Int) -> Tuple16Int:
-        assert len(vector) == 16
         cycle_left_shift_vector = *vector[1:], vector[0]
         return *vector[1:], self._l_func(cycle_left_shift_vector)
 
     def _l_func(self, vector: Tuple16Int) -> int:
-        assert len(vector) == 16
         product = tuple(
             self._mult_field(vector[i], self._l_vector[i]) for i in range(len(vector))
         )
@@ -116,7 +108,6 @@ class Grasshopper:
         return product
 
     def _sum_field(self, vector: Tuple16Int) -> int:
-        assert len(vector) == 16
         _sum = 0
         for number in vector:
             _sum ^= number
