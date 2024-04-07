@@ -1,6 +1,6 @@
 import pytest
 
-from src.key import Key
+from src.key import Key, RoundKey
 
 
 def test_init() -> None:
@@ -27,6 +27,6 @@ def test_halves() -> None:
 
     # Assert
     assert result == (
-        tuple(range(0, 16)),
-        tuple(range(16, 32)),
+        RoundKey(tuple(range(0, 16))),
+        RoundKey(tuple(range(16, 32))),
     )

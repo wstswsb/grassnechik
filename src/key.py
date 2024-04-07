@@ -1,11 +1,27 @@
 from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Self
+from typing import Iterator, Self
+
+from src.types import Tuple16Int, Tuple32Int
+
+
+@dataclass(frozen=True, slots=True)
+class RoundKey:
+    vector: Tuple16Int
+
+    def __post_init__(self) -> None:
+        if len(self.vector) != 16:
+            raise ValueError(
+                f"round key len must be 16 bytes, but given {len(self.vector)}"
+            )
+
+    def __iter__(self) -> Iterator[int]:
+        return iter(self.vector)
 
 
 @dataclass(frozen=True, slots=True)
 class Key:
-    vector: tuple[int, ...]
+    vector: Tuple32Int
 
     def __post_init__(self) -> None:
         if len(self.vector) != 32:
@@ -16,5 +32,5 @@ class Key:
         return cls(tuple(vector))
 
     @property
-    def halves(self) -> tuple[tuple[int, ...], tuple[int, ...]]:
-        return self.vector[:16], self.vector[16:]
+    def halves(self) -> tuple[RoundKey, RoundKey]:
+        return RoundKey(self.vector[:16]), RoundKey(self.vector[16:])
