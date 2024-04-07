@@ -11,6 +11,15 @@ class Grasshopper:
     def __init__(self, key: Key):
         self._round_keys = self._expand_key(key)
 
+    def encrypt(self, block: Tuple16Int) -> Tuple16Int:
+        cypher_text = block[:]
+        for i in range(9):
+            cypher_text = self._xor_vectors(cypher_text, self._round_keys[i].vector)
+            cypher_text = self._substitute_based_on_pi(cypher_text)
+            cypher_text = self._l_transformation(cypher_text)
+        cypher_text = self._xor_vectors(cypher_text, self._round_keys[9].vector)
+        return cypher_text
+
     def _expand_key(self, key: Key) -> tuple[RoundKey, ...]:
         mut_round_keys: list[RoundKey] = []
         round_keys_pair = key.halves

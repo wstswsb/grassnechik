@@ -1,3 +1,5 @@
+import binascii
+
 from src.core import Grasshopper
 from src.key import Key, RoundKey
 
@@ -79,3 +81,20 @@ def test_key_expand() -> None:
             )
         ),
     )  # fmt: skip
+
+
+def test_encrypt() -> None:
+    # Arrange
+    message = list(binascii.unhexlify("1122334455667700ffeeddccbbaa9988"))
+    key = Key.from_iterable(
+        binascii.unhexlify(
+            "8899aabbccddeeff0011223344556677"
+            "fedcba98765432100123456789abcdef"
+        )
+    )  # fmt: skip
+
+    # Act
+    result = Grasshopper(key).encrypt(tuple(message))
+
+    # Assert
+    assert result == tuple(binascii.unhexlify("7f679d90bebc24305a468d42b9d4edcd"))
