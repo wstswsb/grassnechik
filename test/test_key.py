@@ -1,6 +1,6 @@
 import pytest
 
-from src.key import Key, RoundKey
+from grassnechik.key import Key, RoundKey
 
 
 def test_round_key_init() -> None:

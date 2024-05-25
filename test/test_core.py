@@ -1,7 +1,7 @@
 import binascii
 
-from src.grasshopper import Grasshopper
-from src.key import Key, RoundKey
+from grassnechik.grassnechik import Grassnechik
+from grassnechik.key import Key, RoundKey
 
 
 def test_key_expand() -> None:
@@ -16,7 +16,7 @@ def test_key_expand() -> None:
     )  # fmt: skip
 
     # Act
-    cypher = Grasshopper(key)
+    cypher = Grassnechik(key)
 
     # Assert
     assert cypher._round_keys == (
@@ -94,7 +94,7 @@ def test_encrypt() -> None:
     )  # fmt: skip
 
     # Act
-    result = Grasshopper(key).encrypt(tuple(message))
+    result = Grassnechik(key).encrypt(tuple(message))
 
     # Assert
     assert result == tuple(binascii.unhexlify("7f679d90bebc24305a468d42b9d4edcd"))
@@ -111,7 +111,7 @@ def test_decrypt() -> None:
     )  # fmt: skip
 
     # Act
-    result = Grasshopper(key).decrypt(tuple(cypher))
+    result = Grassnechik(key).decrypt(tuple(cypher))
 
     # Assert
     assert result == tuple(binascii.unhexlify("1122334455667700ffeeddccbbaa9988"))

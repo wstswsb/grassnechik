@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Self
 
-from src.types import Tuple16Int, Tuple32Int
+from grassnechik.types import Tuple16Int, Tuple32Int
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,9 +1,9 @@
-from src.constants import L_VECTOR, PI, PI_INVERSE, C
-from src.key import Key, RoundKey
-from src.types import Tuple16Int
+from grassnechik.constants import L_VECTOR, PI, PI_INVERSE, C
+from grassnechik.key import Key, RoundKey
+from grassnechik.types import Tuple16Int
 
 
-class Grasshopper:
+class Grassnechik:
     _pi: tuple[int, ...] = PI
     _pi_inverse: tuple[int, ...] = PI_INVERSE
     _c: tuple[Tuple16Int, ...] = C
