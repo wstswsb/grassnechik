@@ -1,3 +1,4 @@
+import binascii
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Self
@@ -15,6 +16,11 @@ class RoundKey:
                 f"round key len must be 16 bytes, but given {len(self.vector)}"
             )
 
+    @classmethod
+    def from_hex(cls, hex_view: str) -> Self:
+        vector = binascii.unhexlify(hex_view)
+        return cls(tuple(vector))
+
 
 @dataclass(frozen=True, slots=True)
 class Key:
@@ -26,6 +32,11 @@ class Key:
 
     @classmethod
     def from_iterable(cls, vector: Iterable[int]) -> Self:
+        return cls(tuple(vector))
+
+    @classmethod
+    def from_hex(cls, hex_view: str) -> Self:
+        vector = binascii.unhexlify(hex_view)
         return cls(tuple(vector))
 
     @property
